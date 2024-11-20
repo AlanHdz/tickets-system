@@ -92,8 +92,8 @@ export class AuthService extends PrismaClient implements OnModuleInit {
       const { password: __, ...rest } = newUser
 
       return {
-        user: { ...rest, id: Number(rest.id) },
-        token: await this.signJwt({ ...rest, id: Number(rest.id) })
+        user: { ...rest },
+        token: await this.signJwt({ ...rest })
       }
 
 

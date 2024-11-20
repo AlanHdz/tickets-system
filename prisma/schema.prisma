@@ -14,10 +14,61 @@ datasource db {
 }
 
 model User {
-  id       BigInt @id @default(autoincrement())
+  id       Int      @id @default(autoincrement())
   name     String
   lastName String
-  username String @unique
-  email    String @unique
+  username String   @unique
+  email    String   @unique
   password String
+  Ticket   Ticket[]
+}
+
+model Category {
+  id                  Int                   @id @default(autoincrement())
+  name                String
+  createdAt           DateTime              @default(now())
+  updatedAt           DateTime              @updatedAt
+  CategoriesOnTickets CategoriesOnTickets[]
+}
+
+model Label {
+  id              Int               @id @default(autoincrement())
+  name            String
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+  LabelsOnTickets LabelsOnTickets[]
+}
+
+model Ticket {
+  id          Int    @id @default(autoincrement())
+  title       String
+  description String @db.Text
+  priority    String
+  status      String
+
+  assigned   User @relation(fields: [assignedId], references: [id])
+  assignedId Int
+
+  createdAt           DateTime              @default(now())
+  updatedAt           DateTime              @updatedAt
+  CategoriesOnTickets CategoriesOnTickets[]
+  LabelsOnTickets     LabelsOnTickets[]
+}
+
+model CategoriesOnTickets {
+  ticket     Ticket   @relation(fields: [ticketId], references: [id])
+  ticketId   Int
+  category   Category @relation(fields: [categoryId], references: [id])
+  categoryId Int
+
+  @@id([ticketId, categoryId])
+}
+
+model LabelsOnTickets {
+  ticket   Ticket @relation(fields: [ticketId], references: [id])
+  ticketId Int
+  label    Label  @relation(fields: [labelId], references: [id])
+  labelId  Int
+
+  @@id([ticketId, labelId])
 }
