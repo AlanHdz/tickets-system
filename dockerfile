@@ -1,10 +1,11 @@
-FROM node:20-alpine3.20 as base
+FROM node:21-alpine3.19
 
 WORKDIR /app
 
-COPY ["package.json", "package-lock.json", "./"]
+COPY package*.json ./
 
-FROM base as dev
-ENV NODE_ENV=dev
 RUN npm install
+
 COPY . .
+
+EXPOSE 3000

@@ -1,36 +1,33 @@
 
 
 services:
-  tickets-system-api:
-    depends_on:
-      - db
-    build: 
-      context: .
-      dockerfile: Dockerfile
-      target: dev
-    image: appointments-api-docker
-    container_name: tickets-system-api
-    restart: always
-    command: npm run start:dev
-    ports:
-      - "${PORT}:${PORT}"
-    environment:
-      - DATABASE_URL=${DATABASE_URL}
-    volumes:
-      - ./:/app
-  
-  db:
+  # tickets-system-api:
+  #   depends_on:
+  #     - tickets-db
+  #   build: 
+  #     context: .
+  #     dockerfile: Dockerfile
+  #   image: tickets-api-docker
+  #   container_name: tickets-system-api
+  #   command: npm run start:dev
+  #   ports:
+  #     - "${PORT}:${PORT}"
+  #   environment:
+  #     - DATABASE_URL=${DATABASE_URL}
+  #   volumes:
+  #     - ./:/usr/src/app/src
+
+  tickets-db:
+    container_name: tickets_database
     image: postgres:16.2
-    container_name: tickets-system-db
     restart: always
+    volumes:
+      - tickets-db:/var/lib/postgresql/data
     ports:
       - 5432:5432
-    volumes:
-      - pgdata:/var/lib/postgresql/data
     environment:
+      - POSTGRES_USER=${DB_USER}
       - POSTGRES_PASSWORD=${DB_PASSWORD}
       - POSTGRES_DB=${DB_NAME}
-
 volumes:
-  pgdata:
-    driver: local
+  tickets-db:
