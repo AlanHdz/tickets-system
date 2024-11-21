@@ -51,10 +51,10 @@ model Ticket {
   assigned   User @relation(fields: [assignedId], references: [id])
   assignedId Int
 
-  createdAt           DateTime              @default(now())
-  updatedAt           DateTime              @updatedAt
-  CategoriesOnTickets CategoriesOnTickets[]
-  LabelsOnTickets     LabelsOnTickets[]
+  createdAt  DateTime              @default(now())
+  updatedAt  DateTime              @updatedAt
+  categories CategoriesOnTickets[]
+  labels     LabelsOnTickets[]
 }
 
 model CategoriesOnTickets {
