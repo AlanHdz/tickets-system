@@ -26,6 +26,7 @@ model User {
 model Category {
   id                  Int                   @id @default(autoincrement())
   name                String
+  enable              Boolean               @default(true)
   createdAt           DateTime              @default(now())
   updatedAt           DateTime              @updatedAt
   CategoriesOnTickets CategoriesOnTickets[]
@@ -34,17 +35,18 @@ model Category {
 model Label {
   id              Int               @id @default(autoincrement())
   name            String
+  enable          Boolean           @default(true)
   createdAt       DateTime          @default(now())
   updatedAt       DateTime          @updatedAt
   LabelsOnTickets LabelsOnTickets[]
 }
 
 model Ticket {
-  id          Int    @id @default(autoincrement())
+  id          Int      @id @default(autoincrement())
   title       String
-  description String @db.Text
-  priority    String
-  status      String
+  description String   @db.Text
+  priority    Priority @default(LOW)
+  status      Status   @default(OPEN)
 
   assigned   User @relation(fields: [assignedId], references: [id])
   assignedId Int
@@ -71,4 +73,15 @@ model LabelsOnTickets {
   labelId  Int
 
   @@id([ticketId, labelId])
+}
+
+enum Priority {
+  HIGH
+  MEDIUM
+  LOW
+}
+
+enum Status {
+  OPEN
+  CLOSE
 }
