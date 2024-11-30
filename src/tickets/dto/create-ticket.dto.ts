@@ -12,13 +12,17 @@ export class CreateTicketDto {
   @IsString()
   description: string;
 
+  @IsNumber()
+  @Type(() => Number)
+  assignedId: number;
+
   @IsEnum(TicketPriorityList, {
     message: `Valid priority are ${TicketPriorityList}`
   })
   priority: Priority
 
   @IsEnum(TicketStatusList, {
-    message: `Valid status are ${TicketPriorityList}`
+    message: `Valid status are ${TicketStatusList}`
   })
   status: Status
 

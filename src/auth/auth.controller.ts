@@ -44,7 +44,6 @@ export class AuthController {
   async hola(@User() user: CurrentUser, @Token() token: string) {
     return {
       user,
-      token
     };
   }
 

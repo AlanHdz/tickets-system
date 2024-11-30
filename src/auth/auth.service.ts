@@ -1,11 +1,10 @@
-import { BadRequestException, Inject, Injectable, Logger, OnModuleInit } from '@nestjs/common';
+import { BadRequestException, Inject, Injectable, InternalServerErrorException, Logger, NotFoundException, OnModuleInit } from '@nestjs/common';
 import { LoginUserDto } from './dto/login-user.dto';
 import { RegisterUserDto } from './dto/register-user.dto';
 import { PrismaClient } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { JwtPayload } from './interfaces/jwt-payload.interface';
-import { stringify } from 'querystring';
 import { envs } from 'src/config/envs';
 
 @Injectable()
@@ -103,6 +102,14 @@ export class AuthService extends PrismaClient implements OnModuleInit {
     }
   }
 
+  async findUser(id) {
+    try {
+      return await this.user.findUnique({ where: { id: id } }) 
+    } catch (error) {
+      this.handleErrors(error)
+    }
+  }
+
   async verifyToken(token: string) {
     try {
       
@@ -115,9 +122,15 @@ export class AuthService extends PrismaClient implements OnModuleInit {
       }
 
     } catch (error) {
-      console.log(error);
-      throw new BadRequestException(error.message)
+      this.handleErrors(error)
     }
+  }
+
+  private handleErrors(error: any) {
+
+    this.logger.error(error);
+    throw new InternalServerErrorException(error)
+
   }
   
 

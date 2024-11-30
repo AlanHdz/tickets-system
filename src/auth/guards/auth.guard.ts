@@ -28,12 +28,17 @@ export class AuthGuard implements CanActivate {
     try {
 
       const { user, token: newToken } = await this.authService.verifyToken(token)
+      
+      const userExists = await this.authService.findUser(user.id)
+
+      if (!userExists) {
+        res.clearCookie('token')
+        throw new UnauthorizedException()
+      }
 
       await this.cookieService.setCookie(res, 'token', token, 2, true);
 
       request['user'] = user;
-
-      request['token'] = newToken;
 
     } catch {
       throw new UnauthorizedException();
