@@ -19,8 +19,6 @@ export class CommentsController {
   @Get('tickets/:ticketId')
   @UseGuards(AuthGuard)
   async getCommentsByTicket(@Param('ticketId') ticketId: string) {
-    console.log(ticketId);
-    
     return await this.commentsService.getCommentsByTicket(+ticketId);
   }
 
