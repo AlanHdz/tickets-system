@@ -10,14 +10,23 @@ import { CurrentUser } from 'src/auth/interfaces';
 export class CommentsController {
   constructor(private readonly commentsService: CommentsService) {}
 
-  @Post('tickets/:ticketId')
+  @Post()
   @UseGuards(AuthGuard)
-  create(@Body() createCommentDto: CreateCommentDto, @User() user: CurrentUser, @Param('ticketId') ticketId: string) {
-    return this.commentsService.create(createCommentDto, user, +ticketId);
+  async create(@Body() createCommentDto: CreateCommentDto, @User() user: CurrentUser) {
+    return await this.commentsService.create(createCommentDto, user);
+  }
+
+  @Get('tickets/:ticketId')
+  @UseGuards(AuthGuard)
+  async getCommentsByTicket(@Param('ticketId') ticketId: string) {
+    console.log(ticketId);
+    
+    return await this.commentsService.getCommentsByTicket(+ticketId);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.commentsService.remove(+id);
+  @UseGuards(AuthGuard)
+  async remove(@Param('id') id: string) {
+    return await this.commentsService.remove(+id);
   }
 }

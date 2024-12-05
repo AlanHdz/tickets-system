@@ -1,9 +1,12 @@
-import { IsString, Min } from "class-validator";
+import { IsNumber, IsPositive, IsString, Length, Min } from "class-validator";
 
 export class CreateCommentDto {
 
   @IsString()
-  @Min(1)
   message: string;
+
+  @IsNumber()
+  @IsPositive()
+  ticketId: number;
 
 }
